@@ -4,12 +4,11 @@ import axios from 'axios';
 const Search = ()=>{
 
   const baseUrl = "https://en.wikipedia.org/w/api.php";
-  const[term, setTerm] = useState('');
+  const[term, setTerm] = useState('programming');
   const [results, setResults] = useState([]);
 
-  console.log(results);
-  useEffect(() => {
 
+  useEffect(() => {
     const search = async()=>{
       const {data} = await axios.get(baseUrl, {
         params:{
@@ -23,9 +22,28 @@ const Search = ()=>{
       setResults(data.query.search);
     }
 
-    if(term){
+    if(term && !results.length){
       search();
-    } 
+    }else{
+
+      const timeoutId = setTimeout(() =>{
+        if(term){
+          search();
+        } 
+      }, 500);
+  
+  
+      /**Allow only to return a function and when it starts will run "Hi there.." and then
+      after it will run "Clean up first" */
+      return ()=>{
+        clearTimeout(timeoutId);
+      }
+
+    }
+
+    
+
+    
   }, [term]);
 
   /** Not recommended!!! ***
@@ -78,3 +96,25 @@ const Search = ()=>{
 
 
 export default Search;
+
+
+
+
+/**
+ * EXPLANATION:
+ * 
+ * const timeoutId = setTimeout(() =>{
+      if(term){
+        search();
+      } 
+    }, 500);
+    
+    return ()=>{
+      clearTimeout(timeoutId);
+    }
+
+ * When I type my first letter a timeOut is set to delay the API request,
+ * then, when I type the next letter the timeOut will be cancel and a new one will be sett
+ * and so on until the time goes by. Because the return will be call first all the time in useEffect()
+ * function..
+ */
