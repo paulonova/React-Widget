@@ -5,10 +5,22 @@ const Search = ()=>{
 
   const baseUrl = "https://en.wikipedia.org/w/api.php";
   const[term, setTerm] = useState('programming');
+  const[debouncedTerm, setDebouncedTerm] = useState(term);
   const [results, setResults] = useState([]);
 
 
-  useEffect(() => {
+  useEffect(() =>{
+    const timerId = setTimeout(() =>{
+      setDebouncedTerm(term);
+    }, 1000);
+
+    return ()=>{
+      clearTimeout(timerId);
+    }
+
+  }, [term]);
+
+  useEffect(() =>{
     const search = async()=>{
       const {data} = await axios.get(baseUrl, {
         params:{
@@ -16,35 +28,17 @@ const Search = ()=>{
           list: 'search',
           format: 'json',
           origin: '*',
-          srsearch: term
+          srsearch: debouncedTerm
         }
       });
       setResults(data.query.search);
     }
 
-    if(term && !results.length){
-      search();
-    }else{
+    search();
 
-      const timeoutId = setTimeout(() =>{
-        if(term){
-          search();
-        } 
-      }, 500);
-  
-  
-      /**Allow only to return a function and when it starts will run "Hi there.." and then
-      after it will run "Clean up first" */
-      return ()=>{
-        clearTimeout(timeoutId);
-      }
+  }, [debouncedTerm]);
 
-    }
-
-    
-
-    
-  }, [term]);
+ 
 
   /** Not recommended!!! ***
    * <span>dangerouslySetInnerHTML={{ __html: result.snippet}}</span> */
@@ -72,7 +66,7 @@ const Search = ()=>{
         </div>
       </div>
     )
-  })
+  });
 
   return (
     <div>
