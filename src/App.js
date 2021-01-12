@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import Search from './components/Search';
 import Dropdown from './components/Dropdown';
+import Translate from './components/Translate';
+
 
 const items= [
   {
@@ -19,35 +21,27 @@ const items= [
 
 const options = [
   {
-    lable: 'The color Red',
+    label: 'The color Red',
     value: 'tomato'
   },
 
   {
-    lable: 'The color Green',
+    label: 'The color Green',
     value: 'green'
   },
 
   {
-    lable: 'The color Blue',
+    label: 'The color Blue',
     value: 'blue'
   }
 ];
 
 const App = () =>{
 
-  const [selected, setSelected] = useState(options[0]);
-  const [showDropdown, setShowDropdown] = useState(true);
 
   return(
     <div>
-    <br/>
-    <button onClick={()=>setShowDropdown(!showDropdown)}>Toggle Dropdown</button>
-      { showDropdown ?
-        <Dropdown 
-          selected={selected} 
-          onSelectedChange={setSelected}
-          options={options}/> : null}
+      <Translate/>
     </div>
   );
 };
