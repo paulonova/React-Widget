@@ -22,7 +22,7 @@ const options = [
   }
 ]
 
-const apiKey="AIzaSyCHUCmpR7cT_yDFHC98CZJy2LTms-IwDlM";
+
 
 const Translate = ()=>{
 

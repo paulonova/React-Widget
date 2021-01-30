@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import Search from './components/Search';
 import Dropdown from './components/Dropdown';
+import Accordion from './components/Accordion';
 import Translate from './components/Translate';
+import Header from './components/Header';
+import Route from './components/Route';
+import Menu from './components/Menu';
 
 
 const items= [
@@ -38,10 +42,29 @@ const options = [
 
 const App = () =>{
 
+const [selected, setSelected] = useState(options[0]);
 
   return(
     <div>
-      <Translate/>
+    <Header/>
+    <Menu/>
+      <Route path="/">
+        <Accordion items={items}/>
+      </Route>
+      <Route path="/list">
+        <Search/>
+      </Route>
+      <Route path="/dropdown">
+        <Dropdown
+        label='Select a Color'
+        options={options}
+        selected={selected}
+        onSelectedChange={setSelected}
+        />
+      </Route>
+      <Route path="/translate">
+        <Translate/>
+      </Route>
     </div>
   );
 };
@@ -49,3 +72,11 @@ const App = () =>{
 
 export default App;
 
+/**
+ * PS: When you pass a props from an inside component
+ * the props be available to the parents also.
+ * EX:
+ * <Route path="/">
+      <Accordion items={items}/>  //props available to Route
+    </Route>
+ */
